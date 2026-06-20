@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>⛅ Weather App ⛅</title>
+    <title>Weather App</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Weather Icons CSS -->
@@ -14,21 +14,21 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body text-center">
-                    <h1 class="card-title">Weather in <span th:text="${city}">City</span>, <span th:text="${country}">Country</span></h1>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h1 class="card-title mb-0">Weather in <span th:text="${city}">City</span>, <span th:text="${country}">Country</span></h1>
+                        <button id="unitToggle" class="btn btn-outline-light btn-sm" onclick="toggleUnit()">°F</button>
+                    </div>
                     <span th:classappend="${weatherIcon} + ' weather-icon'"></span>
                     <p class="card-text"><strong>Description:</strong> <span th:text="${weatherDescription}">Description</span></p>
-                    <p class="card-text"><strong>Temperature:</strong> <span th:text="${temperature}">Temperature</span>°C</p>
+                    <p class="card-text"><strong>Temperature:</strong> <span id="tempDisplay" th:text="${temperature}" data-celsius="${temperature}">Temperature</span><span id="tempUnit">°C</span></p>
                     <p class="card-text"><strong>Humidity:</strong> <span th:text="${humidity}">Humidity</span>%</p>
                     <p class="card-text"><strong>Wind Speed:</strong> <span th:text="${windSpeed}">Wind Speed</span> m/s</p>
-                    <a href="/" class="btn btn-secondary btn-block">Back</a>
-                    <a th:href="@{/history(city=${city})}" class="btn btn-info btn-block">View Historical Data</a>
+                    <div class="d-flex justify-content-center gap-2 mt-3">
+                        <a href="/" class="btn btn-secondary btn-block mx-1">Back</a>
+                        <a th:href="@{/history(city=${city})}" class="btn btn-info btn-block mx-1">History</a>
+                        <button type="button" class="btn btn-warning btn-block mx-1" data-toggle="modal" data-target="#setAlertModal">Set Alert</button>
+                    </div>
 
-                    <!-- Button to open the Set Alert modal -->
-                    <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#setAlertModal">
-                        Set Alert
-                    </button>
-
-                    <!-- Error display -->
                     <div th:if="${error}" class="alert alert-danger mt-3">
                         <strong>Error:</strong> <span th:text="${error}"></span>
                     </div>
@@ -43,25 +43,23 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header justify-content-center">
-                <h5 class="modal-title font-weight-bold" id="setAlertModalLabel" style="color:Black;">Set Temperature Alert</h5>
+                <h5 class="modal-title font-weight-bold" id="setAlertModalLabel">Set Temperature Alert</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
             <div class="modal-body">
-
                 <form th:action="@{/setAlert}" method="post">
                     <div class="form-group">
-                        <label for="email" style="color:Black">Email address:</label>
+                        <label for="email">Email address:</label>
                         <input type="email" class="form-control" id="email" name="email" placeholder="Enter email for notification alert" required>
                     </div>
                     <div class="form-group">
-                        <label for="tempThreshold" style="color:Black">Temperature Threshold (°C):</label>
+                        <label for="tempThreshold">Temperature Threshold (°C):</label>
                         <input type="number" class="form-control" id="tempThreshold" name="tempThreshold" placeholder="Enter temperature threshold" required>
                     </div>
                     <div class="form-group">
-                        <label for="alertType" style="color:Black">Alert Type:</label>
+                        <label for="alertType">Alert Type:</label>
                         <select class="form-control" id="alertType" name="alertType">
                             <option value="above">Above Threshold</option>
                             <option value="below">Below Threshold</option>
@@ -75,9 +73,9 @@
     </div>
 </div>
 
-<!-- Bootstrap JS and dependencies -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="/js/weather.js"></script>
 </body>
 </html>
