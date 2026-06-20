@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>⛅ Weather App ⛅</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Weather Icons CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.10/css/weather-icons.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/weather.css">
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h1 class="card-title">Weather in <span th:text="${city}">City</span>, <span th:text="${country}">Country</span></h1>
+                    <span th:classappend="${weatherIcon} + ' weather-icon'"></span>
+                    <p class="card-text"><strong>Description:</strong> <span th:text="${weatherDescription}">Description</span></p>
+                    <p class="card-text"><strong>Temperature:</strong> <span th:text="${temperature}">Temperature</span>°C</p>
+                    <p class="card-text"><strong>Humidity:</strong> <span th:text="${humidity}">Humidity</span>%</p>
+                    <p class="card-text"><strong>Wind Speed:</strong> <span th:text="${windSpeed}">Wind Speed</span> m/s</p>
+                    <a href="/" class="btn btn-secondary btn-block">Back</a>
+                    <a th:href="@{/history(city=${city})}" class="btn btn-info btn-block">View Historical Data</a>
+
+                    <!-- Button to open the Set Alert modal -->
+                    <button type="button" class="btn btn-warning btn-block" data-toggle="modal" data-target="#setAlertModal">
+                        Set Alert
+                    </button>
+
+                    <!-- Error display -->
+                    <div th:if="${error}" class="alert alert-danger mt-3">
+                        <strong>Error:</strong> <span th:text="${error}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Set Alert Modal -->
+<div class="modal fade" id="setAlertModal" tabindex="-1" role="dialog" aria-labelledby="setAlertModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title font-weight-bold" id="setAlertModalLabel" style="color:Black;">Set Temperature Alert</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+
+                <form th:action="@{/setAlert}" method="post">
+                    <div class="form-group">
+                        <label for="email" style="color:Black">Email address:</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter email for notification alert" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tempThreshold" style="color:Black">Temperature Threshold (°C):</label>
+                        <input type="number" class="form-control" id="tempThreshold" name="tempThreshold" placeholder="Enter temperature threshold" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="alertType" style="color:Black">Alert Type:</label>
+                        <select class="form-control" id="alertType" name="alertType">
+                            <option value="above">Above Threshold</option>
+                            <option value="below">Below Threshold</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="city" th:value="${city}">
+                    <button type="submit" class="btn btn-primary btn-block">Set Alert</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
