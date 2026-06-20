@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>⛅ Weather App ⛅</title>
+    <title>Weather App</title>
     <!-- Bootstrap CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <!-- Weather Icons CSS -->
@@ -15,19 +15,44 @@
             <div class="card">
                 <div class="card-body">
                     <h1 class="card-title text-center">Weather App</h1>
-                    <form action="/weather" method="get">
+                    <form action="/weather" method="get" id="weatherForm" onsubmit="return validateCity()">
                         <div class="form-group">
-                            <input type="text" class="form-control" name="city" placeholder="Enter city name (e.g., Indore, Delhi, Mumbai, Bangalore, Kolkata)" required>
+                            <input type="text" class="form-control" name="city" id="cityInput" placeholder="Enter city name" required>
+                            <small id="cityError" class="text-danger d-none">Please enter a valid city name</small>
                         </div>
                         <button type="submit" class="btn btn-primary btn-block">Get Weather</button>
                     </form>
+                    <div class="mt-4">
+                        <p class="text-center mb-2"><strong>Quick Select</strong></p>
+                        <div class="d-flex flex-wrap justify-content-center gap-2">
+                            <a th:href="@{/weather(city='Delhi')}" class="btn btn-sm btn-outline-light m-1">Delhi</a>
+                            <a th:href="@{/weather(city='Mumbai')}" class="btn btn-sm btn-outline-light m-1">Mumbai</a>
+                            <a th:href="@{/weather(city='Bangalore')}" class="btn btn-sm btn-outline-light m-1">Bangalore</a>
+                            <a th:href="@{/weather(city='Chennai')}" class="btn btn-sm btn-outline-light m-1">Chennai</a>
+                            <a th:href="@{/weather(city='Kolkata')}" class="btn btn-sm btn-outline-light m-1">Kolkata</a>
+                            <a th:href="@{/weather(city='Hyderabad')}" class="btn btn-sm btn-outline-light m-1">Hyderabad</a>
+                            <a th:href="@{/weather(city='Indore')}" class="btn btn-sm btn-outline-light m-1">Indore</a>
+                            <a th:href="@{/weather(city='Bhopal')}" class="btn btn-sm btn-outline-light m-1">Bhopal</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Bootstrap JS and dependencies -->
+<script>
+function validateCity() {
+    var city = document.getElementById('cityInput').value.trim();
+    var errorEl = document.getElementById('cityError');
+    if (city.length < 2) {
+        errorEl.classList.remove('d-none');
+        return false;
+    }
+    errorEl.classList.add('d-none');
+    return true;
+}
+</script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
