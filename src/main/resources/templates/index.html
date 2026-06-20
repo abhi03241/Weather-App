@@ -35,6 +35,10 @@
                             <a th:href="@{/weather(city='Bhopal')}" class="btn btn-sm btn-outline-light m-1">Bhopal</a>
                         </div>
                     </div>
+                    <div class="mt-3" id="recentCitiesContainer" style="display:none;">
+                        <p class="text-center mb-2"><strong>Recently Viewed</strong></p>
+                        <div id="recentCities" class="d-flex flex-wrap justify-content-center"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,6 +56,20 @@ function validateCity() {
     errorEl.classList.add('d-none');
     return true;
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    var recent = JSON.parse(localStorage.getItem('recentCities') || '[]');
+    var container = document.getElementById('recentCities');
+    var containerDiv = document.getElementById('recentCitiesContainer');
+    if (container && recent.length > 0) {
+        containerDiv.style.display = '';
+        var html = '';
+        recent.forEach(function(city) {
+            html += '<a href="/weather?city=' + encodeURIComponent(city) + '" class="btn btn-sm btn-outline-light m-1">' + city + '</a>';
+        });
+        container.innerHTML = html;
+    }
+});
 </script>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>

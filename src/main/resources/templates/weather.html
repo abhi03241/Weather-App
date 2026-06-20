@@ -34,6 +34,21 @@
                     </div>
                 </div>
             </div>
+            <div class="card mt-3" th:unless="${error}">
+                <div class="card-body text-center">
+                    <p class="mb-2"><strong>Switch City</strong></p>
+                    <div class="d-flex flex-wrap justify-content-center">
+                        <a th:href="@{/weather(city='Delhi')}" class="btn btn-sm btn-outline-light m-1">Delhi</a>
+                        <a th:href="@{/weather(city='Mumbai')}" class="btn btn-sm btn-outline-light m-1">Mumbai</a>
+                        <a th:href="@{/weather(city='Bangalore')}" class="btn btn-sm btn-outline-light m-1">Bangalore</a>
+                        <a th:href="@{/weather(city='Chennai')}" class="btn btn-sm btn-outline-light m-1">Chennai</a>
+                        <a th:href="@{/weather(city='Kolkata')}" class="btn btn-sm btn-outline-light m-1">Kolkata</a>
+                        <a th:href="@{/weather(city='Hyderabad')}" class="btn btn-sm btn-outline-light m-1">Hyderabad</a>
+                        <a th:href="@{/weather(city='Indore')}" class="btn btn-sm btn-outline-light m-1">Indore</a>
+                        <a th:href="@{/weather(city='Bhopal')}" class="btn btn-sm btn-outline-light m-1">Bhopal</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -77,5 +92,11 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="/js/weather.js"></script>
+<script>
+    var currentCity = document.querySelector('[th\\:text="${city}"]');
+    if (currentCity && currentCity.textContent.trim() !== 'City') {
+        addRecentCity(currentCity.textContent.trim());
+    }
+</script>
 </body>
 </html>

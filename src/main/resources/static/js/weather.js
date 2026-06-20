@@ -51,4 +51,23 @@ function applyTempUnit() {
     });
 }
 
+function addRecentCity(city) {
+    var recent = JSON.parse(localStorage.getItem('recentCities') || '[]');
+    recent = recent.filter(function(c) { return c.toLowerCase() !== city.toLowerCase(); });
+    recent.unshift(city);
+    if (recent.length > 5) recent = recent.slice(0, 5);
+    localStorage.setItem('recentCities', JSON.stringify(recent));
+}
+
+function loadRecentCities() {
+    var recent = JSON.parse(localStorage.getItem('recentCities') || '[]');
+    var container = document.getElementById('recentCities');
+    if (!container || recent.length === 0) return;
+    var html = '';
+    recent.forEach(function(city) {
+        html += '<a href="/weather?city=' + encodeURIComponent(city) + '" class="btn btn-sm btn-outline-light m-1">' + city + '</a>';
+    });
+    container.innerHTML = html;
+}
+
 document.addEventListener('DOMContentLoaded', applyTempUnit);
