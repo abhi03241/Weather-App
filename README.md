@@ -8,6 +8,8 @@
 
 - [About the Project](#star2-about-the-project)
   * [Screenshots](#camera-screenshots)
+  * [Data Flow Diagram](#data-flow-diagram)
+  * [ER Diagram](#er-diagram)
   * [Technologies Used](#space_invader-technologies-used)
   * [Features](#dart-features)
   * [Environment Variables](#key-environment-variables)
@@ -45,6 +47,76 @@ The Real-Time Weather Monitoring System is a robust application designed to fetc
   
   
 </div>
+
+
+<!-- Data Flow Diagram -->
+### :arrows_counterclockwise: Data Flow Diagram
+
+```mermaid
+flowchart LR
+    User([User]) -->|Sets alert thresholds / views data| WebUI[Spring Boot Web UI<br/>Thymeleaf]
+    WebUI <-->|Read/Write| DB[(MySQL Database)]
+    WebUI -->|Trigger alert check| AlertEngine[Alert Engine]
+    AlertEngine -->|Send email| Mail[Spring Mail Service]
+    Mail -->|Notification| User
+
+    Scheduler[Spring Scheduler<br/>Every 5 min] -->|Fetch weather| API[OpenWeatherMap API]
+    API -->|JSON response| Scheduler
+    Scheduler -->|Store readings| DB
+    Scheduler -->|Aggregate daily stats| Aggregator[Daily Aggregator<br/>avg/max/min]
+    Aggregator -->|Persist summaries| DB
+    Scheduler -->|Evaluate thresholds| AlertEngine
+```
+
+<!-- ER Diagram -->
+### :card_file_box: ER Diagram
+
+```mermaid
+erDiagram
+    CITY ||--o{ WEATHER_DATA : "has"
+    CITY ||--o{ DAILY_SUMMARY : "summarized_in"
+    USER ||--o{ ALERT : "creates"
+    CITY ||--o{ ALERT : "monitored_by"
+
+    CITY {
+        BIGINT id PK
+        VARCHAR name
+        VARCHAR country
+        VARCHAR timezone
+    }
+    WEATHER_DATA {
+        BIGINT id PK
+        BIGINT city_id FK
+        DATETIME recorded_at
+        DOUBLE temperature
+        DOUBLE feels_like
+        DOUBLE humidity
+        DOUBLE wind_speed
+        VARCHAR condition
+    }
+    DAILY_SUMMARY {
+        BIGINT id PK
+        BIGINT city_id FK
+        DATE summary_date
+        DOUBLE avg_temperature
+        DOUBLE max_temperature
+        DOUBLE min_temperature
+    }
+    USER {
+        BIGINT id PK
+        VARCHAR username
+        VARCHAR email
+        VARCHAR password
+    }
+    ALERT {
+        BIGINT id PK
+        BIGINT user_id FK
+        BIGINT city_id FK
+        DOUBLE threshold_temp
+        ENUM condition "ABOVE|BELOW"
+        BOOLEAN active
+    }
+```
 
 
 <!-- TechStack -->
